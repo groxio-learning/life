@@ -45,11 +45,15 @@ defmodule Life.Grid do
 
   def count_neighbors(grid, {x, y}) do
     Life.Grid.has_neighbors(grid, {x, y})
-    |> Enum.filter(fn x -> x == true end)
+    |> Enum.filter(fn x -> x end)
     |> Enum.count()
   end
 
-  def read(grid, point), do: Map.get(grid, point, false)
+  def next_cell(grid, point) do
+    :feature_not_implemented
+  end
+
+  defp read(grid, point), do: Map.get(grid, point, false)
 
   def next_grid(grid), do: :feature_not_implemented
 
