@@ -45,5 +45,5 @@ defmodule GridTest do
     assert actual == expected
   end
 
-  defp new_grid(opts \\ :unused), do: Grid.new(opts)
+  defp new_grid(opts \\ :repeater), do: Grid.new(opts)
 end

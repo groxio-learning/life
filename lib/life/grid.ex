@@ -17,18 +17,27 @@
 defmodule Life.Grid do
   @height 3
   @width 3
-  def new(_ignore) do
-    %{
-      {1, 1} => false,
-      {2, 1} => true,
-      {3, 1} => false,
-      {1, 2} => false,
-      {2, 2} => true,
-      {3, 2} => false,
-      {1, 3} => false,
-      {2, 3} => true,
-      {3, 3} => false
-    }
+  def new(grid) when is_list(grid) do
+    for x <- 1..3, y <- 1..3, into: %{} do
+      {{x, y}, {x, y} in grid}
+    end
+  end
+
+  def new(:repeater) do
+    new([
+      {2, 1},
+      {2, 2},
+      {2, 3}
+    ])
+  end
+
+  def new(:stable) do
+    new([
+      {1, 1},
+      {1, 2},
+      {2, 1},
+      {2, 2}
+    ])
   end
 
   def has_neighbors(grid, {x, y}) do
@@ -51,22 +60,33 @@ defmodule Life.Grid do
   end
 
   def next_cell(grid, point) do
+    count_neighbors = Life.Grid.count_neighbors(grid, point)
+
     cond do
-      Life.Grid.count_neighbors(grid, point) === 2 -> grid[point]
-      Life.Grid.count_neighbors(grid, point) === 3 -> true
-      Life.Grid.count_neighbors(grid, point) === 1 -> false
+      count_neighbors === 2 -> grid[point]
+      count_neighbors === 3 -> true
+      true -> false
     end
   end
 
   defp read(grid, point), do: Map.get(grid, point, false)
 
-  def next_grid(grid) do
-    new_keys =
-      Map.keys(grid)
-      |> Enum.map(fn x -> Life.Grid.next_cell(grid, x) end)
+  # def next_grid(grid) do
+  #   new_values =
+  #     Map.keys(grid)
+  #     |> Enum.map(fn x -> Life.Grid.next_cell(grid, x) end)
 
-    Enum.zip(Map.keys(grid), new_keys) |> Enum.into(%{})
+  #   Enum.zip(Map.keys(grid), new_values) |> Enum.into(%{})
+  # end
+
+  def next_grid(grid) do
+    for x <- 1..3, y <- 1..3, into: %{} do
+      {{x, y}, Life.Grid.next_cell(grid, {x, y})}
+    end
   end
 
   def show(grid), do: :feature_not_implemented
+  # show one cell
+  # show one row
+  # show one grid
 end
