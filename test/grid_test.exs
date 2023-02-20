@@ -29,6 +29,7 @@ defmodule GridTest do
 
   test "next_grid" do
     actual = new_grid() |> Grid.next_grid()
+
     expected = %{
       {1, 1} => false,
       {2, 1} => false,
@@ -44,5 +45,5 @@ defmodule GridTest do
     assert actual == expected
   end
 
-  defp new_grid(opts \\ :unused), do:  Grid.new(opts)
+  defp new_grid(opts \\ :unused), do: Grid.new(opts)
 end
